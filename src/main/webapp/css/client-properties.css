@@ -1,0 +1,674 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #242424;
+    color: white;
+}
+
+/* HERO */
+.contact-hero {
+    width: 100%;
+    min-height: 430px;
+    padding: 24px 8%;
+    background:
+            linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.78)),
+            url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1900&q=90");
+    background-size: cover;
+    background-position: center;
+    animation: zoomBg 12s ease-in-out infinite alternate;
+}
+
+.mh-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mh-logo {
+    color: white;
+    text-decoration: none;
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 0.9;
+}
+
+.mh-logo span {
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.mh-menu {
+    display: flex;
+    gap: 50px;
+}
+
+.mh-menu a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    position: relative;
+    transition: 0.3s;
+}
+
+.mh-menu a:hover,
+.mh-menu a.active {
+    color: white;
+    letter-spacing: 1px;
+}
+
+.mh-menu a.active::after {
+    content: "";
+    width: 35px;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+}
+
+.contact-hero-content {
+    margin-top: 85px;
+    animation: fadeUp 1.2s ease forwards;
+}
+
+.contact-hero-content h1 {
+    font-size: 70px;
+    font-weight: 300;
+    line-height: 1.1;
+}
+
+.mh-line {
+    height: 2px;
+    background: white;
+    margin: 30px 0;
+    animation: lineGrow 1.5s ease forwards;
+}
+
+.contact-hero-content p {
+    font-weight: bold;
+}
+
+.contact-hero-content span {
+    color: rgba(255,255,255,0.7);
+}
+
+/* PAGE */
+.client-page {
+    width: 85%;
+    margin: 60px auto;
+}
+
+.content h2 {
+    font-size: 36px;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 30px;
+}
+
+/* FILTERS */
+.filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 35px;
+}
+
+.filters button,
+.filters input {
+    padding: 13px 18px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    outline: none;
+}
+
+.filters button {
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.filters button.active,
+.filters button:hover {
+    background: white;
+    color: #222;
+}
+
+.filters input::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+/* GRID */
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+/* CARD */
+.property-card {
+    background: #1d1d1d;
+    border: 1px solid rgba(255,255,255,0.12);
+    animation: fadeUp 1s ease forwards;
+    overflow: hidden;
+    transition: 0.4s;
+}
+
+.property-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.property-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    filter: brightness(0.75);
+    transition: 0.4s;
+}
+
+.property-card:hover img {
+    filter: brightness(0.95);
+    transform: scale(1.03);
+}
+
+.property-info {
+    padding: 24px;
+}
+
+.tag {
+    display: inline-block;
+    color: white;
+    border-bottom: 2px solid white;
+    padding-bottom: 7px;
+    margin-bottom: 18px;
+    font-weight: bold;
+}
+
+.property-info h3 {
+    font-size: 26px;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.property-info p {
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 18px;
+}
+
+.meta {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.meta span {
+    border: 1px solid rgba(255,255,255,0.16);
+    padding: 11px;
+    color: rgba(255,255,255,0.75);
+}
+
+.property-info h4 {
+    font-size: 24px;
+    margin-bottom: 22px;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* LIKE BUTTON */
+.like {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.8);
+
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+/* hover */
+.like:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-color: white;
+}
+
+/* liked state */
+.like.liked {
+    background: rgba(255, 0, 80, 0.15);
+    border: 1px solid rgba(255, 0, 80, 0.4);
+    color: #ff4d6d;
+}
+
+/* DETAILS BUTTON */
+.details {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+
+    background: white;
+    color: #111;
+
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+/* hover */
+.details:hover {
+    background: #e5e5e5;
+    transform: translateY(-2px);
+}
+/* ===== PROFILE HERO SAME STYLE ===== */
+.profile-hero {
+    width: 100%;
+    min-height: 430px;
+    padding: 24px 8%;
+    background:
+            linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.78)),
+            url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1900&q=90");
+    background-size: cover;
+    background-position: center;
+    animation: zoomBg 12s ease-in-out infinite alternate;
+}
+
+.profile-hero-content {
+    margin-top: 85px;
+    animation: fadeUp 1.2s ease forwards;
+}
+
+.profile-hero-content h1 {
+    font-size: 70px;
+    font-weight: 300;
+    line-height: 1.1;
+}
+
+/* ===== PROFILE CARD ===== */
+.profile-card {
+    background: #1d1d1d;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 35px;
+    margin-bottom: 45px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    animation: fadeUp 1s ease forwards;
+}
+
+.avatar {
+    width: 90px;
+    height: 90px;
+    background: white;
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.profile-card h2 {
+    font-size: 42px;
+    font-weight: 300;
+    margin-bottom: 12px;
+}
+
+.profile-card p {
+    color: rgba(255,255,255,0.72);
+    margin: 6px 0;
+}
+
+/* ===== EMPTY ===== */
+.empty-profile {
+    grid-column: 1 / -1;
+    background: #1d1d1d;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 35px;
+    color: rgba(255,255,255,0.75);
+    animation: fadeUp 1s ease forwards;
+}
+
+/* ===== PROFILE BUTTONS SAME DARK STYLE ===== */
+.client-card-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.like-btn,
+.btn-details {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.like-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.8);
+}
+
+.like-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-color: white;
+}
+
+.like-btn.liked {
+    background: rgba(255,0,80,0.15);
+    border: 1px solid rgba(255,0,80,0.4);
+    color: #ff4d6d;
+}
+
+.btn-details {
+    background: white;
+    color: #111;
+}
+
+.btn-details:hover {
+    background: #dcdcdc;
+    transform: translateY(-2px);
+}
+/* ===== FOOTER ===== */
+/* ===== FOOTER ===== */
+.main-footer {
+    background: #0f0f0f;
+    margin-top: 80px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* container */
+.footer-container {
+    width: 85%;
+    margin: auto;
+    padding: 60px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+/* columns */
+.footer-col {
+    flex: 1;
+    min-width: 230px;
+    animation: fadeUp 1s ease forwards;
+}
+
+.footer-col h2 {
+    font-size: 28px;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.footer-col h3 {
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+/* text + links */
+.footer-col p,
+.footer-col a {
+    color: rgba(255,255,255,0.65);
+    display: block;
+    margin: 6px 0;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+/* hover links */
+.footer-col a:hover {
+    color: white;
+    padding-left: 6px;
+}
+
+/* socials */
+.socials {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.socials a {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.socials a:hover {
+    background: white;
+    color: black;
+}
+
+/* bottom */
+.footer-bottom {
+    text-align: center;
+    padding: 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+}
+/* HERO BACKGROUND ANIMATION */
+.animate-hero {
+    animation: zoomHero 8s ease forwards;
+}
+
+@keyframes zoomHero {
+    from {
+        transform: scale(1.1);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+.animate-content {
+    animation: fadeUpHero 1.2s ease forwards;
+}
+
+@keyframes fadeUpHero {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.mh-line {
+    width: 0;
+    height: 2px;
+    background: white;
+    margin: 20px 0;
+    animation: lineGrow 1.5s ease forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes lineGrow {
+    to {
+        width: 120px;
+    }
+}
+.mh-navbar {
+    animation: fadeDown 1s ease;
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.contact-hero:hover {
+    filter: brightness(1.05);
+    transition: 0.5s;
+}
+.contact-hero {
+    height: 90vh;
+    background:
+            linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)),
+            url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* animation */
+.animate-hero {
+    animation: zoomHero 8s ease forwards;
+}
+
+@keyframes zoomHero {
+    from { transform: scale(1.1); }
+    to { transform: scale(1); }
+}
+
+.animate-content {
+    animation: fadeUpHero 1.2s ease forwards;
+}
+
+@keyframes fadeUpHero {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.card-tags,
+.details-tags {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.property-status {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.property-status.disponible {
+    background: rgba(0,255,120,0.16);
+    color: #80ffbc;
+    border: 1px solid rgba(0,255,120,0.28);
+}
+
+.property-status.vendu {
+    background: rgba(255,80,80,0.16);
+    color: #ffaaa8;
+    border: 1px solid rgba(255,80,80,0.28);
+}
+
+.property-status.loue {
+    background: rgba(80,160,255,0.16);
+    color: #9dccff;
+    border: 1px solid rgba(80,160,255,0.28);
+}
+
+.slider-box {
+    position: relative;
+    width: 100%;
+}
+
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(0,0,0,0.55);
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    z-index: 5;
+    transition: 0.3s;
+}
+
+.slider-btn:hover {
+    background: white;
+    color: #111;
+}
+
+.slider-btn.left {
+    left: 18px;
+}
+
+.slider-btn.right {
+    right: 18px;
+}
+
+.details-contact-btn {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 12px 20px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.details-contact-btn:hover {
+    background: white;
+    color: #111;
+}
+.password-form {
+    display: grid;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.password-form input {
+    padding: 14px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+}
+
+.password-form button {
+    background: white;
+    color: #111;
+    border: none;
+    padding: 14px;
+    font-weight: 900;
+    cursor: pointer;
+}
