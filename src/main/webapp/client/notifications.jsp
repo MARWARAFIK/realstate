@@ -16,6 +16,8 @@
     List<Message> notifications = dao.getRepliesByClient(client.getId());
 
     dao.markRepliesSeen(client.getId());
+
+    int notifCount = 0;
 %>
 
 <!DOCTYPE html>
@@ -23,13 +25,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Notifications</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/client-properties.css?v=5000">
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/client-properties.css?v=13000">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 
 <body>
 
-<!-- HERO -->
-<header class="contact-hero">
+<header class="contact-hero animate-hero">
+
     <nav class="mh-navbar">
         <a class="mh-logo" href="<%=request.getContextPath()%>/client/home.jsp">
             REAL <br><span>ESTATE</span>
@@ -40,21 +44,28 @@
             <a href="<%=request.getContextPath()%>/client/properties.jsp">Properties</a>
             <a href="<%=request.getContextPath()%>/client/profile.jsp">Profile</a>
             <a href="<%=request.getContextPath()%>/client/contact.jsp">Contact</a>
-            <a class="active" href="#">🔔</a>
             <a href="<%=request.getContextPath()%>/client/logout">Logout</a>
         </div>
+
+        <a href="<%=request.getContextPath()%>/client/notifications.jsp" class="notif-btn active-notif">
+            <i class="fa-solid fa-bell"></i>
+
+            <% if(notifCount > 0) { %>
+            <span><%= notifCount %></span>
+            <% } %>
+        </a>
     </nav>
 
-    <div class="contact-hero-content">
+    <div class="contact-hero-content animate-content">
         <h1>NOTIFICATIONS</h1>
         <div class="mh-line"></div>
         <p>Vos réponses et alertes</p>
         <span>Restez informé des réponses des agences</span>
     </div>
+
 </header>
 
-<!-- PAGE -->
-<div class="client-page">
+<section class="client-page">
 
     <h2>Vos notifications</h2>
     <p class="subtitle">Réponses reçues de l'agence.</p>
@@ -71,7 +82,9 @@
 
         <div class="notif-card">
 
-            <div class="notif-icon">🔔</div>
+            <div class="notif-icon">
+                <i class="fa-solid fa-bell"></i>
+            </div>
 
             <div class="notif-content">
                 <h3>Réponse agence</h3>
@@ -87,8 +100,8 @@
                 </p>
 
                 <span class="notif-date">
-                    <%= m.getReplyDate() %>
-                </span>
+                        <%= m.getReplyDate() %>
+                    </span>
             </div>
 
         </div>
@@ -97,7 +110,9 @@
 
     </div>
 
-</div>
+</section>
+
+<%@ include file="footer.jsp" %>
 
 </body>
 </html>

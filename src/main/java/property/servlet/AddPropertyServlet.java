@@ -44,6 +44,7 @@ public class AddPropertyServlet extends HttpServlet {
             p.setSurface(Double.parseDouble(request.getParameter("surface")));
             p.setChambres(Integer.parseInt(request.getParameter("chambres")));
             p.setStatut(request.getParameter("statut"));
+            p.setVirtualTourUrl(request.getParameter("virtualTourUrl"));
             p.setAgenceId(agence.getId());
 
             String mainImage = request.getParameter("image");
@@ -54,7 +55,6 @@ public class AddPropertyServlet extends HttpServlet {
             p.setImage(mainImage);
 
             PropertyDAO dao = new PropertyDAO();
-
             int propertyId = dao.addAndReturnId(p);
 
             if (propertyId <= 0) {

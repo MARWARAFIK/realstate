@@ -27,7 +27,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Modifier propriété</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence.css?v=500">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence-forms.css?v=<%= System.currentTimeMillis() %>">
 </head>
 <body>
 
@@ -99,7 +100,13 @@
                     <label>Image URL</label>
                     <input type="text" name="image" value="<%= p.getImage() %>" required>
                 </div>
-
+                <div class="form-group full">
+                    <label>Visite virtuelle Kuula URL</label>
+                    <input type="text"
+                           name="virtualTourUrl"
+                           value="<%= p.getVirtualTourUrl() != null ? p.getVirtualTourUrl() : "" %>"
+                           placeholder="https://kuula.co/share/collection/xxxxx">
+                </div>
                 <button class="btn-submit" type="submit">Enregistrer les modifications</button>
             </form>
         </section>

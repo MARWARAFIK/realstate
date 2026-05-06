@@ -18,7 +18,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Paramètres Agence</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence.css?v=500">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence-forms.css?v=<%= System.currentTimeMillis() %>">
 </head>
 <body>
 

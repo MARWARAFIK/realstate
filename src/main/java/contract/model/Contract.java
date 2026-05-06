@@ -6,7 +6,7 @@ public class Contract {
     private double montant;
 
     private String clientNom, clientEmail, propertyTitle, propertyVille;
-
+    ;
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

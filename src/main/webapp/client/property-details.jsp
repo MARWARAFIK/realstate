@@ -2,17 +2,20 @@
 <%@ page import="client.model.Client" %>
 <%@ page import="property.dao.PropertyDAO" %>
 <%@ page import="property.model.Property" %>
+<%@ page import="message.dao.MessageDAO" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.util.List" %>
 
 <%
     Client client = (Client) session.getAttribute("client");
+
     if (client == null) {
         response.sendRedirect(request.getContextPath() + "/auth/client-login.jsp");
         return;
     }
 
     int id = Integer.parseInt(request.getParameter("id"));
+
     PropertyDAO dao = new PropertyDAO();
     Property p = dao.getById(id);
 
@@ -27,6 +30,11 @@
         images.add(p.getImage());
     }
 
+    boolean liked = dao.isLikedByClient(p.getId(), client.getId());
+
+    MessageDAO notifDao = new MessageDAO();
+    int notifCount = notifDao.countClientNotifications(client.getId());
+
     String statut = p.getStatut() != null ? p.getStatut() : "disponible";
     String mapQuery = URLEncoder.encode(p.getAdresse() + " " + p.getVille(), "UTF-8");
 %>
@@ -35,22 +43,26 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Détails propriété</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/property-details.css?v=6000">
+    <title><%= p.getTitre() %></title>
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/property-details.css?v=10000">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/client-properties.css?v=9100">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 <body>
 
 <div class="details-page">
 
-    <a class="back" href="<%=request.getContextPath()%>/client/properties.jsp">← Retour aux propriétés</a>
+    <a class="back" href="<%=request.getContextPath()%>/client/properties.jsp">
+        ← Retour aux propriétés
+    </a>
 
     <div class="details-card">
 
         <div class="slider-box">
             <button class="slider-btn left" type="button" onclick="prevImage()">‹</button>
-
             <img id="sliderImage" class="main-img" src="<%= images.get(0) %>" alt="Image propriété">
-
             <button class="slider-btn right" type="button" onclick="nextImage()">›</button>
         </div>
 
@@ -62,7 +74,10 @@
             </div>
 
             <h1><%= p.getTitre() %></h1>
-            <p class="location"><%= p.getVille() %> - <%= p.getAdresse() %></p>
+
+            <p class="location">
+                <%= p.getVille() %> - <%= p.getAdresse() %>
+            </p>
 
             <div class="meta">
                 <span>Type: <b><%= p.getType() %></b></span>
@@ -72,24 +87,35 @@
 
             <h2><%= p.getPrix() %> DH</h2>
 
-            <% if(request.getParameter("success") != null) { %>
-            <p class="success">Votre demande a été envoyée à l'agence.</p>
-            <% } %>
-
-            <% if(request.getParameter("error") != null) { %>
-            <p class="error">Erreur lors de l'envoi.</p>
-            <% } %>
-
             <div class="actions">
-                <button type="button" onclick="showForm('Reservation')">Réserver ce bien</button>
+
+                <a href="javascript:void(0)"
+                   class="details-like <%= liked ? "liked" : "" %>"
+                   data-id="<%= p.getId() %>"
+                   onclick="toggleLike(this)">
+                    <%= liked ? "💔 Retirer des favoris" : "❤️ Ajouter aux favoris" %>
+                </a>
+
+                <button type="button" onclick="showForm('Reservation')">
+                    Réserver ce bien
+                </button>
 
                 <a class="details-contact-btn"
                    href="<%=request.getContextPath()%>/client/contact.jsp?propertyId=<%= p.getId() %>&agenceId=<%= p.getAgenceId() %>">
                     Contacter l'agence
                 </a>
+
+                <% if(p.getVirtualTourUrl() != null && !p.getVirtualTourUrl().trim().isEmpty()) { %>
+                <a class="details-tour-btn" href="#virtual-tour">
+                    Visite virtuelle
+                </a>
+                <% } %>
+
             </div>
 
-            <form id="contactForm" action="<%=request.getContextPath()%>/client/send-message" method="post">
+            <div id="ajaxMessage"></div>
+
+            <form id="contactForm">
                 <input type="hidden" name="propertyId" value="<%= p.getId() %>">
                 <input type="hidden" name="agenceId" value="<%= p.getAgenceId() %>">
                 <input type="hidden" name="typeMessage" id="typeMessage" value="Reservation">
@@ -102,8 +128,27 @@
 
                 <button type="submit" id="submitBtn">Envoyer la réservation</button>
             </form>
+
         </div>
     </div>
+
+    <% if(p.getVirtualTourUrl() != null && !p.getVirtualTourUrl().trim().isEmpty()) { %>
+    <div class="virtual-tour-section" id="virtual-tour">
+        <h2>Visite virtuelle 3D</h2>
+        <p>Explorez ce bien immobilier en visite virtuelle avant de vous déplacer.</p>
+
+        <div class="kuula-box">
+            <iframe
+                    src="<%= p.getVirtualTourUrl() %>"
+                    width="100%"
+                    height="520"
+                    frameborder="0"
+                    allowfullscreen
+                    allow="xr-spatial-tracking; gyroscope; accelerometer">
+            </iframe>
+        </div>
+    </div>
+    <% } %>
 
     <div class="map-card">
         <h2>Localisation</h2>
@@ -119,6 +164,8 @@
     </div>
 
 </div>
+
+<%@ include file="footer.jsp" %>
 
 <script>
     const images = [
@@ -149,6 +196,62 @@
         document.getElementById("submitBtn").innerText = "Envoyer la réservation";
         document.getElementById("contactForm").scrollIntoView({ behavior: "smooth" });
     }
+
+    function toggleLike(btn) {
+        const propertyId = btn.getAttribute("data-id");
+
+        fetch("<%=request.getContextPath()%>/client/like-property-ajax?id=" + propertyId)
+            .then(response => response.text())
+            .then(result => {
+                if (result.trim() === "liked") {
+                    btn.classList.add("liked");
+                    btn.innerHTML = "💔 Retirer des favoris";
+                } else if (result.trim() === "unliked") {
+                    btn.classList.remove("liked");
+                    btn.innerHTML = "❤️ Ajouter aux favoris";
+                } else {
+                    alert("Erreur like");
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                alert("Erreur serveur");
+            });
+    }
+
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const form = this;
+        const btn = document.getElementById("submitBtn");
+        const box = document.getElementById("ajaxMessage");
+
+        btn.disabled = true;
+        btn.innerText = "Envoi en cours...";
+
+        fetch("<%=request.getContextPath()%>/client/send-message", {
+            method: "POST",
+            body: new FormData(form)
+        })
+            .then(response => response.text())
+            .then(data => {
+                box.innerHTML = "<div class='success'>Votre réservation a été envoyée avec succès.</div>";
+
+                form.querySelector("input[name='telephone']").value = "";
+                form.querySelector("textarea[name='message']").value = "";
+
+                btn.disabled = false;
+                btn.innerText = "Envoyer la réservation";
+            })
+            .catch(error => {
+                box.innerHTML = "<div class='error'>Erreur serveur. Réessayez.</div>";
+
+                btn.disabled = false;
+                btn.innerText = "Envoyer la réservation";
+
+                console.log(error);
+            });
+    });
 </script>
 
 </body>

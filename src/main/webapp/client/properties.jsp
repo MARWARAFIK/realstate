@@ -3,9 +3,11 @@
 <%@ page import="property.dao.PropertyDAO" %>
 <%@ page import="property.model.Property" %>
 <%@ page import="java.util.List" %>
+<%@ page import="message.dao.MessageDAO" %>
 
 <%
     Client client = (Client) session.getAttribute("client");
+
     if (client == null) {
         response.sendRedirect(request.getContextPath() + "/auth/client-login.jsp");
         return;
@@ -13,174 +15,395 @@
 
     PropertyDAO dao = new PropertyDAO();
     List<Property> properties = dao.getAll();
+
+    MessageDAO notifDao = new MessageDAO();
+    int notifCount = notifDao.countClientNotifications(client.getId());
 %>
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
     <meta charset="UTF-8">
+
     <title>Properties</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/client-properties.css?v=7000">
+
+    <link rel="stylesheet"
+          href="<%=request.getContextPath()%>/css/client-properties.css?v=9999">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
+
 <body>
 
+<!-- HERO -->
 <header class="contact-hero animate-hero">
+
+    <!-- NAVBAR -->
     <nav class="mh-navbar">
-        <a class="mh-logo" href="<%=request.getContextPath()%>/client/home.jsp">
+
+        <!-- LOGO -->
+        <a class="mh-logo"
+           href="<%=request.getContextPath()%>/client/home.jsp">
+
             REAL <br><span>ESTATE</span>
+
         </a>
 
+        <!-- MENU -->
         <div class="mh-menu">
-            <a href="<%=request.getContextPath()%>/client/home.jsp">Home</a>
-            <a class="active" href="<%=request.getContextPath()%>/client/properties.jsp">Properties</a>
-            <a href="<%=request.getContextPath()%>/client/profile.jsp">Profile</a>
-            <a href="<%=request.getContextPath()%>/client/contact.jsp">Contact</a>
-            <a href="<%=request.getContextPath()%>/client/logout">Logout</a>
+
+            <a href="<%=request.getContextPath()%>/client/home.jsp">
+                Home
+            </a>
+
+            <a class="active"
+               href="<%=request.getContextPath()%>/client/properties.jsp">
+
+                Properties
+
+            </a>
+
+            <a href="<%=request.getContextPath()%>/client/profile.jsp">
+                Profile
+            </a>
+
+            <a href="<%=request.getContextPath()%>/client/contact.jsp">
+                Contact
+            </a>
+
+            <a href="<%=request.getContextPath()%>/client/logout">
+                Logout
+            </a>
+
         </div>
+
+        <!-- NOTIFICATION -->
+        <a href="<%=request.getContextPath()%>/client/notifications.jsp"
+           class="notif-btn">
+
+            <i class="fa-solid fa-bell"></i>
+
+            <% if(notifCount > 0) { %>
+            <span><%= notifCount %></span>
+            <% } %>
+
+        </a>
+
     </nav>
 
+    <!-- HERO CONTENT -->
     <div class="contact-hero-content animate-content">
-        <h1>REAL ESTATE<br>PROPERTIES</h1>
+
+        <h1>
+            REAL ESTATE <br> PROPERTIES
+        </h1>
+
         <div class="mh-line"></div>
-        <p>Propriétés disponibles</p>
-        <span>Découvrez les meilleurs biens immobiliers</span>
+
+        <p>
+            Propriétés disponibles
+        </p>
+
+        <span>
+            Découvrez les meilleurs biens immobiliers modernes
+        </span>
+
     </div>
+
 </header>
 
-<div class="client-page">
+<!-- PAGE -->
+<section class="client-page">
 
-    <h2>Propriétés disponibles</h2>
-    <p class="subtitle">Toutes les propriétés ajoutées par les agences.</p>
+    <h2>
+        Propriétés disponibles
+    </h2>
 
+    <p class="subtitle">
+        Toutes les propriétés ajoutées par les agences.
+    </p>
+
+    <!-- FILTERS -->
     <div class="filters">
-        <button class="active" onclick="filterCards('all', event)">Toutes</button>
-        <button onclick="filterCards('À louer', event)">À louer</button>
-        <button onclick="filterCards('À vendre', event)">À vendre</button>
-        <button onclick="filterCards('Appartement', event)">Appartement</button>
-        <button onclick="filterCards('Villa', event)">Villa</button>
-        <button onclick="filterCards('Maison', event)">Maison</button>
-        <input type="text" id="citySearch" placeholder="Chercher par ville..." onkeyup="searchCity()">
+
+        <button class="active"
+                onclick="filterCards('all', event)">
+
+            Toutes
+
+        </button>
+
+        <button onclick="filterCards('à louer', event)">
+            À louer
+        </button>
+
+        <button onclick="filterCards('à vendre', event)">
+            À vendre
+        </button>
+
+        <button onclick="filterCards('appartement', event)">
+            Appartement
+        </button>
+
+        <button onclick="filterCards('villa', event)">
+            Villa
+        </button>
+
+        <button onclick="filterCards('maison', event)">
+            Maison
+        </button>
+
+        <input type="text"
+               id="citySearch"
+               placeholder="Chercher par ville..."
+               onkeyup="searchCity()">
+
     </div>
 
+    <!-- GRID -->
     <div class="property-grid">
 
-        <% if (properties.isEmpty()) { %>
-        <div class="empty-profile">Aucune propriété disponible.</div>
+        <% if(properties.isEmpty()) { %>
+
+        <div class="empty-profile">
+            Aucune propriété disponible.
+        </div>
+
         <% } %>
 
         <% for(Property p : properties){
-            String statut = p.getStatut() != null ? p.getStatut() : "disponible";
-            boolean liked = dao.isLikedByClient(p.getId(), client.getId());
+
+            String statut =
+                    p.getStatut() != null
+                            ? p.getStatut()
+                            : "disponible";
+
+            boolean liked =
+                    dao.isLikedByClient(
+                            p.getId(),
+                            client.getId()
+                    );
         %>
+
+        <!-- CARD -->
         <div class="property-card"
+
              data-operation="<%= p.getOperation() != null ? p.getOperation().toLowerCase().trim() : "" %>"
+
              data-type="<%= p.getType() != null ? p.getType().toLowerCase().trim() : "" %>"
+
              data-ville="<%= p.getVille() != null ? p.getVille().toLowerCase().trim() : "" %>">
 
-            <img src="<%= p.getImage() %>" alt="Image propriété">
+            <img src="<%= p.getImage() %>"
+                 alt="property">
 
             <div class="property-info">
 
+                <!-- TAGS -->
                 <div class="card-tags">
-                    <span class="tag"><%= p.getOperation() %></span>
-                    <span class="property-status <%= statut %>"><%= statut %></span>
+
+                    <span class="tag">
+                        <%= p.getOperation() %>
+                    </span>
+
+                    <span class="property-status <%= statut.toLowerCase() %>">
+
+                        <%= statut %>
+
+                    </span>
+
                 </div>
 
-                <h3><%= p.getTitre() %></h3>
-                <p><%= p.getVille() %> - <%= p.getAdresse() %></p>
+                <!-- TITLE -->
+                <h3>
+                    <%= p.getTitre() %>
+                </h3>
 
+                <!-- LOCATION -->
+                <p>
+                    <%= p.getVille() %>
+                    -
+                    <%= p.getAdresse() %>
+                </p>
+
+                <!-- META -->
                 <div class="meta">
-                    <span><%= p.getType() %></span>
-                    <span><%= p.getSurface() %> m²</span>
-                    <span><%= p.getChambres() %> chambres</span>
+
+                    <span>
+                        <%= p.getType() %>
+                    </span>
+
+                    <span>
+                        <%= p.getSurface() %> m²
+                    </span>
+
+                    <span>
+                        <%= p.getChambres() %> chambres
+                    </span>
+
                 </div>
 
-                <h4><%= p.getPrix() %> DH</h4>
+                <!-- PRICE -->
+                <h4>
+                    <%= p.getPrix() %> DH
+                </h4>
 
+                <!-- ACTIONS -->
                 <div class="actions">
 
+                    <!-- LIKE -->
                     <a href="javascript:void(0)"
+
                        class="like <%= liked ? "liked" : "" %>"
+
                        data-id="<%= p.getId() %>"
+
                        onclick="toggleLike(this)">
+
                         <%= liked ? "💔 Retirer" : "❤️ Like" %>
+
                     </a>
 
-                    <a href="<%=request.getContextPath()%>/client/property-details.jsp?id=<%=p.getId()%>" class="details">
+                    <!-- DETAILS -->
+                    <a href="<%=request.getContextPath()%>/client/property-details.jsp?id=<%=p.getId()%>"
+                       class="details">
+
                         Voir détails
+
                     </a>
+
                 </div>
+
             </div>
+
         </div>
 
         <% } %>
 
     </div>
-</div>
+
+</section>
 
 <%@ include file="footer.jsp" %>
 
+<!-- FILTER -->
 <script>
+
     let currentFilter = "all";
 
-    function filterCards(value, event) {
+    function filterCards(value, event){
+
         currentFilter = value.toLowerCase().trim();
 
-        document.querySelectorAll(".filters button").forEach(btn => {
-            btn.classList.remove("active");
-        });
+        document.querySelectorAll(".filters button")
+            .forEach(btn => {
+                btn.classList.remove("active");
+            });
 
         event.target.classList.add("active");
+
         applyFilters();
     }
 
-    function searchCity() {
+    function searchCity(){
         applyFilters();
     }
 
-    function applyFilters() {
-        const cityInput = document.getElementById("citySearch").value.toLowerCase().trim();
-        const cards = document.querySelectorAll(".property-card");
+    function applyFilters(){
+
+        const cityInput =
+            document.getElementById("citySearch")
+                .value
+                .toLowerCase()
+                .trim();
+
+        const cards =
+            document.querySelectorAll(".property-card");
 
         cards.forEach(card => {
-            const operation = card.getAttribute("data-operation") || "";
-            const type = card.getAttribute("data-type") || "";
-            const ville = card.getAttribute("data-ville") || "";
+
+            const operation =
+                card.getAttribute("data-operation") || "";
+
+            const type =
+                card.getAttribute("data-type") || "";
+
+            const ville =
+                card.getAttribute("data-ville") || "";
 
             const matchFilter =
-                currentFilter === "all" ||
-                operation === currentFilter ||
-                type === currentFilter;
+                currentFilter === "all"
+                || operation === currentFilter
+                || type === currentFilter;
 
-            const matchCity = ville.includes(cityInput);
+            const matchCity =
+                ville.includes(cityInput);
 
-            card.style.display = (matchFilter && matchCity) ? "block" : "none";
+            card.style.display =
+                (matchFilter && matchCity)
+                    ? "block"
+                    : "none";
+
         });
     }
 
 </script>
-<script>
-    function toggleLike(btn) {
-        const propertyId = btn.getAttribute("data-id");
 
-        fetch("<%=request.getContextPath()%>/client/like-property-ajax?id=" + propertyId)
+<!-- LIKE AJAX -->
+<script>
+
+    function toggleLike(btn){
+
+        const propertyId =
+            btn.getAttribute("data-id");
+
+        fetch(
+            "<%=request.getContextPath()%>/client/like-property-ajax?id="
+            + propertyId
+        )
+
             .then(response => response.text())
+
             .then(result => {
-                if (result.trim() === "liked") {
+
+                if(result.trim() === "liked"){
+
                     btn.classList.add("liked");
+
                     btn.innerHTML = "💔 Retirer";
-                } else if (result.trim() === "unliked") {
-                    btn.classList.remove("liked");
-                    btn.innerHTML = "❤️ Like";
-                } else {
-                    alert("Erreur like");
+
                 }
+
+                else if(result.trim() === "unliked"){
+
+                    btn.classList.remove("liked");
+
+                    btn.innerHTML = "❤️ Like";
+
+                }
+
+                else{
+
+                    alert("Erreur like");
+
+                }
+
             })
+
             .catch(error => {
+
                 console.log(error);
+
                 alert("Erreur serveur");
+
             });
+
     }
+
 </script>
+
 </body>
 </html>

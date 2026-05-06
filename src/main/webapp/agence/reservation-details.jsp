@@ -76,19 +76,25 @@
             <div class="message-text">
                 <%= r.getMessage() %>
             </div>
-
             <div class="reply-actions">
+
                 <a class="reply-email"
-                   href="mailto:<%= r.getEmail() %>?subject=Réponse REAL ESTATE&body=Bonjour <%= r.getNom() %>,%0D%0A%0D%0A">
+                   href="<%=request.getContextPath()%>/agence/reply.jsp?id=<%= r.getId() %>">
+
+                    <i class="fa-solid fa-paper-plane"></i>
                     Répondre
+
                 </a>
 
                 <a class="reply-phone"
                    href="tel:<%= r.getTelephone() %>">
-                    Appeler
-                </a>
-            </div>
 
+                    <i class="fa-solid fa-phone"></i>
+                    Appeler
+
+                </a>
+
+            </div>
 
         </section>
 

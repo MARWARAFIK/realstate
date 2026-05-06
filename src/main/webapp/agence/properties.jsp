@@ -33,7 +33,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Gestion propriétés</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence.css?v=200">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence.css?v=500">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/agence-forms.css?v=<%= System.currentTimeMillis() %>">
 </head>
 <body>
 
@@ -139,7 +140,16 @@
                     <input type="file" name="images" multiple accept="image/*">
                 </div>
 
-                <button class="btn-submit" type="submit">Ajouter la propriété</button>
+                <div class="form-group full">
+                    <label>Visite virtuelle Kuula URL</label>
+                    <input type="text"
+                           name="virtualTourUrl"
+                           placeholder="https://kuula.co/share/collection/xxxxx">
+                </div>
+
+                <button class="btn-submit" type="submit">
+                    Ajouter la propriété
+                </button>
             </form>
         </section>
 
@@ -205,6 +215,10 @@
                         </div>
 
                         <h4><%= p.getPrix() %> DH</h4>
+
+                        <% if(p.getVirtualTourUrl() != null && !p.getVirtualTourUrl().trim().isEmpty()) { %>
+                        <span class="status disponible">Visite 3D</span>
+                        <% } %>
 
                     </div>
                 </div>

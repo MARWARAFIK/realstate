@@ -1,0 +1,131 @@
+/* FORCE AGENCE FORMS STYLE */
+
+.form-card {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    backdrop-filter: blur(20px) !important;
+    border-radius: 24px !important;
+    padding: 35px !important;
+}
+
+.property-form {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 22px !important;
+    margin-top: 25px !important;
+}
+
+.form-group {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.form-group.full {
+    grid-column: span 2 !important;
+}
+
+.form-group label {
+    color: #ddd !important;
+    margin-bottom: 8px !important;
+    font-weight: 700 !important;
+}
+
+.property-form input,
+.property-form select,
+.property-form textarea {
+    width: 100% !important;
+    background: rgba(255,255,255,0.15) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    color: white !important;
+    padding: 16px 20px !important;
+    border-radius: 25px !important;
+    outline: none !important;
+    font-size: 16px !important;
+}
+
+.property-form input,
+.property-form select {
+    height: 60px !important;
+}
+
+.property-form textarea {
+    min-height: 130px !important;
+    resize: vertical !important;
+}
+
+.property-form input::placeholder,
+.property-form textarea::placeholder {
+    color: rgba(255,255,255,0.55) !important;
+}
+
+.property-form select option {
+    background: #111 !important;
+    color: white !important;
+}
+
+.btn-submit {
+    grid-column: span 2 !important;
+    height: 62px !important;
+    border: none !important;
+    border-radius: 30px !important;
+    background: white !important;
+    color: black !important;
+    font-weight: 900 !important;
+    cursor: pointer !important;
+}
+
+.btn-submit:hover {
+    background: #ddd !important;
+}
+
+@media(max-width: 900px) {
+    .property-form {
+        grid-template-columns: 1fr !important;
+    }
+
+    .form-group.full,
+    .btn-submit {
+        grid-column: span 1 !important;
+    }
+}
+
+/* ===== FIX PAGINATION ===== */
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    margin-top: 35px;
+    padding-top: 10px;
+}
+
+.pagination a {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.16);
+
+    color: white !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none !important;
+
+    font-weight: 900;
+
+    transition: 0.3s;
+}
+
+.pagination a:hover,
+.pagination a.active {
+    background: white;
+    color: #111 !important;
+    transform: translateY(-3px);
+}

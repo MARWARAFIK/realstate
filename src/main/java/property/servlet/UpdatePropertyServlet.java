@@ -37,6 +37,7 @@ public class UpdatePropertyServlet extends HttpServlet {
         p.setChambres(Integer.parseInt(request.getParameter("chambres")));
         p.setImage(request.getParameter("image"));
         p.setStatut(request.getParameter("statut"));
+        p.setVirtualTourUrl(request.getParameter("virtualTourUrl"));
         p.setAgenceId(agence.getId());
 
         PropertyDAO dao = new PropertyDAO();

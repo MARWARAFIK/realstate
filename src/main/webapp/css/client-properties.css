@@ -672,3 +672,124 @@ body {
     font-weight: 900;
     cursor: pointer;
 }
+
+/* ================= NOTIFICATION NAV BUTTON ================= */
+.notif-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: 0.3s;
+}
+
+.notif-btn:hover,
+.notif-btn.active-notif {
+    background: rgba(255,255,255,0.22);
+    transform: translateY(-4px);
+}
+
+.notif-btn span {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    background: #ff4d6d;
+    color: white;
+    font-size: 10px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================= NOTIFICATIONS PAGE ================= */
+.notif-container {
+    display: grid;
+    gap: 24px;
+}
+
+.notif-card {
+    background: #1d1d1d;
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 22px;
+    animation: fadeUpHero 1s ease forwards;
+    transition: 0.3s;
+}
+
+.notif-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(255,255,255,0.32);
+}
+
+.notif-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notif-content h3 {
+    font-size: 25px;
+    font-weight: 300;
+    margin-bottom: 15px;
+}
+
+.notif-content p {
+    color: rgba(255,255,255,0.72);
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.notif-content b {
+    color: white;
+}
+
+.notif-reply {
+    background: rgba(255,255,255,0.06);
+    border-left: 3px solid white;
+    padding: 15px;
+}
+
+.notif-date {
+    color: rgba(255,255,255,0.45);
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+    .notif-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ajax-remove-btn {
+    border: none;
+    cursor: pointer;
+}
+
+.property-card {
+    transition:
+            0.4s ease,
+            opacity 0.4s ease,
+            transform 0.4s ease;
+}
+
+.ajax-remove-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}

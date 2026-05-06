@@ -10,7 +10,7 @@ import java.util.List;
 public class PropertyDAO {
 
     public boolean add(Property p) {
-        String sql = "INSERT INTO properties(titre, ville, adresse, type, operation, prix, surface, chambres, image, agence_id, statut) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO properties(titre, ville, adresse, type, operation, prix, surface, chambres, image, agence_id, statut, virtual_tour_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -26,6 +26,7 @@ public class PropertyDAO {
             ps.setString(9, p.getImage());
             ps.setInt(10, p.getAgenceId());
             ps.setString(11, p.getStatut() != null ? p.getStatut() : "disponible");
+            ps.setString(12, p.getVirtualTourUrl());
 
             return ps.executeUpdate() > 0;
 
@@ -37,7 +38,7 @@ public class PropertyDAO {
     }
 
     public boolean update(Property p) {
-        String sql = "UPDATE properties SET titre=?, ville=?, adresse=?, type=?, operation=?, prix=?, surface=?, chambres=?, image=?, statut=? WHERE id=? AND agence_id=?";
+        String sql = "UPDATE properties SET titre=?, ville=?, adresse=?, type=?, operation=?, prix=?, surface=?, chambres=?, image=?, statut=?, virtual_tour_url=? WHERE id=? AND agence_id=?";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -52,8 +53,9 @@ public class PropertyDAO {
             ps.setInt(8, p.getChambres());
             ps.setString(9, p.getImage());
             ps.setString(10, p.getStatut());
-            ps.setInt(11, p.getId());
-            ps.setInt(12, p.getAgenceId());
+            ps.setString(11, p.getVirtualTourUrl());
+            ps.setInt(12, p.getId());
+            ps.setInt(13, p.getAgenceId());
 
             return ps.executeUpdate() > 0;
 
@@ -89,6 +91,7 @@ public class PropertyDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, id);
+
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -152,6 +155,7 @@ public class PropertyDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, agenceId);
+
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -183,8 +187,9 @@ public class PropertyDAO {
 
         return false;
     }
+
     public int addAndReturnId(Property p) {
-        String sql = "INSERT INTO properties(titre, ville, adresse, type, operation, prix, surface, chambres, image, agence_id, statut) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO properties(titre, ville, adresse, type, operation, prix, surface, chambres, image, agence_id, statut, virtual_tour_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -200,11 +205,13 @@ public class PropertyDAO {
             ps.setString(9, p.getImage());
             ps.setInt(10, p.getAgenceId());
             ps.setString(11, p.getStatut() != null ? p.getStatut() : "disponible");
+            ps.setString(12, p.getVirtualTourUrl());
 
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
                 ResultSet rs = ps.getGeneratedKeys();
+
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
@@ -273,6 +280,7 @@ public class PropertyDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, limit);
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -293,6 +301,7 @@ public class PropertyDAO {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, propertyId);
+
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -305,6 +314,7 @@ public class PropertyDAO {
 
         return 0;
     }
+
     public boolean isLikedByClient(int propertyId, int clientId) {
         String sql = "SELECT id FROM property_likes WHERE property_id=? AND client_id=?";
 
@@ -315,13 +325,16 @@ public class PropertyDAO {
             ps.setInt(2, clientId);
 
             ResultSet rs = ps.executeQuery();
+
             return rs.next();
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+
+        return false;
     }
+
     private Property mapProperty(ResultSet rs) throws SQLException {
         Property p = new Property();
 
@@ -337,6 +350,7 @@ public class PropertyDAO {
         p.setImage(rs.getString("image"));
         p.setAgenceId(rs.getInt("agence_id"));
         p.setStatut(rs.getString("statut"));
+        p.setVirtualTourUrl(rs.getString("virtual_tour_url"));
 
         return p;
     }

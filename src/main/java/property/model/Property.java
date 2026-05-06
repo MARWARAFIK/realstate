@@ -13,6 +13,7 @@ public class Property {
     private String image;
     private int agenceId;
     private String statut;
+    private String virtualTourUrl;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -49,4 +50,7 @@ public class Property {
 
     public String getStatut() { return statut; }
     public void setStatut(String statut) { this.statut = statut; }
+
+    public String getVirtualTourUrl() { return virtualTourUrl; }
+    public void setVirtualTourUrl(String virtualTourUrl) { this.virtualTourUrl = virtualTourUrl; }
 }
